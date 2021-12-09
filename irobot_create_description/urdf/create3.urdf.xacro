@@ -203,6 +203,9 @@
     <origin xyz="0.153 0 ${0.035 + base_link_z_offset}"/>
   </xacro:ir_opcode_receivers>
 
+
+  
+
   <!-- Ground truth pose -->
   <gazebo>
     <plugin name="gazebo_ros_p3d_robot" filename="libgazebo_ros_p3d.so">
@@ -234,8 +237,37 @@
     </plugin>
   </gazebo>
 
-  
-   <link name="camera_link">
+<!-- Arm base definition-->
+<link name="arm_base_link">
+  <visual>
+    <origin xyz="-0.06 0 0.096" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find irobot_create_description)/meshes/arm/base.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </visual>
+
+  <!-- <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <box size="0.012 0.067 0.023"/>
+    </geometry>
+  </collision> -->
+
+  <!-- <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.035"/>
+    <inertia ixx="0.001"  ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+  </inertial> -->
+</link>
+
+<joint name="arm_base_joint" type="fixed">
+  <parent link="base_link"/>
+  <child link="arm_base_link"/>
+</joint>
+
+  <!-- Camera -->
+
+<link name="camera_link">
   <visual>
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry>
