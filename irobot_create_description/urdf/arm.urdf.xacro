@@ -1,0 +1,390 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:macro name="hephestus_arm" params="name:=arm parent_link:=base_link *origin">
+  
+  <!-- Arm base definition-->
+    <link name="${name}_base_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <mesh filename="file://$(find irobot_create_description)/meshes/arm/base.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.254"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <joint name="${name}_base_joint" type="fixed">
+        <xacro:insert_block name="origin"/>
+        <parent link="${parent_link}"/>
+        <child link="${name}_base_link"/>
+    </joint>
+
+    <!-- motor 1 definition-->
+    <link name="${name}_motor_1_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <mesh filename="file://$(find irobot_create_description)/meshes/arm/motor.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.063"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <xacro:property name="link_1_angle" value="-1.57"/>
+    <joint name="${name}_motor_1_joint" type="fixed">
+        <parent link="${name}_base_link"/>
+        <child link="${name}_motor_1_link"/>
+        <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Arm link 1 definition-->
+     <link name="${name}_link1_link">
+        <visual>
+            <origin xyz="0 0 0.04" rpy="3.14 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find irobot_create_description)/meshes/arm/link_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.093"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <joint name="${name}_link1_joint" type="fixed">
+        <!-- <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="0.5"/> -->
+           <axis xyz="0 0 1"/>
+        <parent link="${name}_motor_1_link"/>
+        <child link="${name}_link1_link"/>
+        <origin xyz="0 0 0" rpy="0 0 ${link_1_angle}"/>
+    </joint>
+
+    <!-- motor 2 definition-->
+    <link name="${name}_motor_2_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <mesh filename="file://$(find irobot_create_description)/meshes/arm/motor.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.063"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial>
+    </link>
+
+    <joint name="${name}_motor_2_joint" type="fixed">
+        <parent link="${name}_link1_link"/>
+        <child link="${name}_motor_2_link"/>
+        <origin xyz="0 0.022 0.051" rpy="1.57 0 3.14"/>
+
+    </joint>
+
+
+    <xacro:property name="link_2_angle" value="0.79"  />
+    <!-- link 2 definition-->
+    <link name="${name}_link_2_1_link">
+        <visual>
+            <origin xyz="0 0.1 -0.021" rpy="0 0 1.57"/>
+            <geometry>
+                <mesh filename="file://$(find irobot_create_description)/meshes/arm/link_2_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.085"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <link name="${name}_link_2_2_link">
+        <visual>
+            <origin xyz="0 0.1 -0.021" rpy="0 0 1.57"/>
+            <geometry>
+                <mesh filename="file://$(find irobot_create_description)/meshes/arm/link_2_2.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.014"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+
+    <joint name="${name}_link_2_1_joint" type="fixed">
+        <parent link="${name}_motor_2_link"/>
+        <child link="${name}_link_2_1_link"/>
+        <origin xyz="0 0 0" rpy="0 0 ${link_2_angle}"/>
+    </joint>
+
+    <joint name="link_2_2_joint" type="fixed">
+        <parent link="${name}_link_2_1_link"/>
+        <child link="${name}_link_2_2_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- motor 3 definition-->
+    <link name="${name}_motor_3_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find irobot_create_description)/meshes/arm/motor.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.063"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <joint name="motor_3_joint" type="fixed">
+        <parent link="${name}_link_2_1_link"/>
+        <child link="${name}_motor_3_link"/>
+        <origin xyz="0 0.1 0 " rpy="3.14 3.14 3.14"/>
+    </joint>
+
+    <!-- Arm link 3 definition-->
+    <xacro:property name="link_3_angle" value="0.79"  />
+    <link name="${name}_link_3_1_link">
+        <visual>
+            <origin xyz="0 0.055 0.005" rpy="0 0 1.57"/>
+            <geometry>
+                <mesh filename="file://$(find irobot_create_description)/meshes/arm/link_3_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.024"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <link name="${name}_link_3_2_link">
+        <visual>
+            <origin xyz="0 0.055 -0.055" rpy="0 0 1.57"/>
+            <geometry>
+            <mesh filename="file://$(find irobot_create_description)/meshes/arm/link_3_2.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial> 
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.099"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <joint name="${name}_link_3_1_joint" type="fixed">
+        <parent link="${name}_motor_3_link"/>
+        <child link="${name}_link_3_1_link"/>
+        <origin xyz="0 0 0" rpy="0 0 ${link_3_angle}"/>   
+        </joint>
+
+    <joint name="${name}_link_3_2_joint" type="fixed">
+        <parent link="${name}_link_3_1_link"/>
+        <child link="${name}_link_3_2_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- motor 4 definition-->
+    <link name="${name}_motor_4_link">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <mesh filename="file://$(find irobot_create_description)/meshes/arm/motor.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+    </visual>
+
+    <!-- <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.063"/>
+        <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+   </inertial> -->
+    </link>
+
+    <joint name="motor_4_joint" type="fixed">
+        <parent link="${name}_link_3_2_link"/>
+        <child link="${name}_motor_4_link"/>
+        <origin xyz="0 0.055 -0.022" rpy="0 -1.57 0"/>
+    </joint>
+
+    <!-- Arm wrist 2 definition-->
+    <link name="${name}_wrist_1_link">
+        <visual>
+            <origin xyz="0 0 0.0075" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find irobot_create_description)/meshes/arm/wrist_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.122"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <joint name="${name}_wrist_1_joint" type="fixed">
+        <parent link="${name}_motor_4_link"/>
+        <child link="${name}_wrist_1_link"/>
+        <origin xyz="0 0 0.0" rpy="0 0 1.57"/>
+    </joint>
+
+    <!-- motor 5 definition-->
+    <link name="${name}_motor_5_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find irobot_create_description)/meshes/arm/motor.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.063"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <joint name="motor_5_joint" type="fixed">
+        <parent link="${name}_wrist_1_link"/>
+        <child link="${name}_motor_5_link"/>
+        <origin xyz="0 -0.02 0.095" rpy="1.57 0 0"/>
+    </joint>
+
+    <!-- Arm wrist 2 definition-->
+    <xacro:property name="wrist_2_angle" value="0.79"  />
+    <link name="${name}_wrist_2_1_link">
+        <visual>
+            <origin xyz="0 0 0.005" rpy="0 0 3.14"/>
+            <geometry>
+                <mesh filename="file://$(find irobot_create_description)/meshes/arm/wrist_2_1.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.010"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <link name="${name}_wrist_2_2_link">
+        <visual>
+            <origin xyz="0 0 -0.053" rpy="0 0 3.14"/>
+            <geometry>
+                <mesh filename="file://$(find irobot_create_description)/meshes/arm/wrist_2_2.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.081"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <joint name="${name}_wrist_2_1_joint" type="fixed">
+        <parent link="${name}_motor_5_link"/>
+        <child link="${name}_wrist_2_1_link"/>
+        <origin xyz="0 0 0" rpy="0 0 ${wrist_2_angle}"/>
+    </joint>
+
+    <joint name="${name}_wrist_2_2_joint" type="fixed">
+        <parent link="${name}_wrist_2_1_link"/>
+        <child link="${name}_wrist_2_2_link"/>
+        
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- motor 6 definition-->
+    <link name="${name}_motor_6_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find irobot_create_description)/meshes/arm/motor.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.063"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <joint name="motor_6_joint" type="fixed">
+        <parent link="${name}_wrist_2_2_link"/>
+        <child link="${name}_motor_6_link"/>
+        <origin xyz="0 0.06 -0.02" rpy="0 1.57 1.57"/>
+    </joint>
+
+    <!-- Arm end effector definition-->
+    <link name="${name}_wrist_3_link">
+        <visual>
+        <origin xyz="0 0 0.0075" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="file://$(find irobot_create_description)/meshes/arm/wrist_3.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <!-- <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.034"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial> -->
+    </link>
+
+    <joint name="${name}_wirst_3_joint" type="fixed">
+        <parent link="${name}_motor_6_link"/>
+        <child link="${name}_wrist_3_link"/>
+        <origin xyz="0 0 0.0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Arm end effector definition-->
+    <!-- <link name="${name}_end_effector_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+            <mesh filename="file://$(find irobot_create_description)/meshes/arm/end_effector.stl" scale="0.001 0.001 0.001"/>
+            </geometry>
+        </visual>
+
+        <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.037"/>
+            <inertia ixx="0"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+       </inertial>
+    </link>
+
+    <joint name="${name}_end_effector_joint" type="fixed">
+        <parent link="${name}_wrist_3_link"/>
+        <child link="${name}_end_effector_link"/>
+        <origin xyz="0 0 0.015" rpy="0 0 0"/>
+    </joint>-->
+
+
+</xacro:macro>
+
+</robot>
